@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "325357876817",
+    "firebase_url": "https://parkingmeterapp.firebaseio.com",
+    "project_id": "parkingmeterapp",
+    "storage_bucket": "parkingmeterapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325357876817:android:29a60a00fca070a8",
+        "android_client_info": {
+          "package_name": "com.park.parkingmeterapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "325357876817-jj124o5b20uvoqntci4cghosuqqe9sbd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.park.parkingmeterapp",
+            "certificate_hash": "403B94D1146E688E975ECC1EA95E4FA2EE141AAC"
+          }
+        },
+        {
+          "client_id": "325357876817-lqi5lfge4795sal13teef50l8ui9fm54.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmdUqvFMF34pfU7J_V9asWbOWPpataQLc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "325357876817-lqi5lfge4795sal13teef50l8ui9fm54.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

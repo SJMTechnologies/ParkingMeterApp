@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:defaultValue="1000"
+        android:key="distance"
+        android:summary="@string/distance_summury"
+        android:title="@string/distance"/>
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/list_pref_array"
+        android:entryValues="@array/list_pref_value"
+        android:key="authenticationType"
+        android:summary="@string/authentication_options_details"
+        android:title="@string/authentication_options"/>
+</PreferenceScreen>
