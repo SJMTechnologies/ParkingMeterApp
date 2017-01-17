@@ -18,10 +18,10 @@ public class PurchasePresenterImpl implements PurchasePresenter{
     public PurchasePresenterImpl(PurchaseView purchaseView){
         this.purchaseView = purchaseView;
     }
-
+    String strPrice="", strTime="";
     @Override
     public void onPlusClicked() {
-        String strPrice, strTime;
+
         price += MIN_PRICE;
         time += MIN_TIME;
         Log.e(TAG, "onIncrease: price " + price + " time " + time);
@@ -46,7 +46,7 @@ public class PurchasePresenterImpl implements PurchasePresenter{
 
     @Override
     public void onMinusClicked() {
-        String strPrice, strTime;
+
         price -= MIN_PRICE;
         time -= MIN_TIME;
         Log.e(TAG, "onDecrease: price " + price + " time " + time);
@@ -71,7 +71,19 @@ public class PurchasePresenterImpl implements PurchasePresenter{
 
     @Override
     public void onDoneClicked() {
-        purchaseView.done();
+        if(strPrice.length()==0)
+        {
+            price = MIN_PRICE;
+            time = MIN_TIME;
+            if(time < 9){
+                strTime = "0" + String.valueOf(time) + ":00";
+            } else {
+                strTime = String.valueOf(time) + ":00";
+            }
+
+            strPrice = String.valueOf(price);
+        }
+        purchaseView.done(strTime, strPrice);
     }
 
     @Override

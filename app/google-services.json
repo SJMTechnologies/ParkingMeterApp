@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "325357876817-m0a6jopcsgojbkt5064tmv38ieu2bp46.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.park.parkingmeterapp",
+            "certificate_hash": "7525ED3C9A3EC875146BAFD83CDF633D592FDB51"
+          }
+        },
+        {
           "client_id": "325357876817-jj124o5b20uvoqntci4cghosuqqe9sbd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

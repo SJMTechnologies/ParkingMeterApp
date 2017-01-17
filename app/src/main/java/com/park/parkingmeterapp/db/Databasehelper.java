@@ -63,11 +63,7 @@ public class Databasehelper extends SQLiteOpenHelper {
         Cursor c = db.rawQuery(query, null);
         Log.e(TAG, "checkUser: Count " + c.getCount());
         db.close();
-        if (c.getCount() == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return c.getCount() != 0;
     }
 
     public boolean checkLoginUser(String strEmail, String strPassword) {
@@ -83,11 +79,7 @@ public class Databasehelper extends SQLiteOpenHelper {
             password = c.getString(c.getColumnIndex(Register.KEY_PASSWORD));
         }
         db.close();
-        if (username.equals(strEmail) && strPassword.equals(password)) {
-            return true;
-        } else {
-            return false;
-        }
+        return username.equals(strEmail) && strPassword.equals(password);
     }
 
     public String getUsername(String email) {

@@ -124,7 +124,6 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(txtAutoComplete.getWindowToken(), 0);
             if (isFromParkLater) {
-
                 Log.e(TAG, "onResult: " + markerDetailList.size());
             }
 
@@ -155,6 +154,7 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
             mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
+                    Log.e(" parkletar 1 lat|LNg",marker.getPosition().latitude + " " + marker.getPosition().longitude );
                     startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle());
                 }
             });
@@ -384,10 +384,11 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
 
         Intent intent = new Intent(getActivity(), PurchaseTimeActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putDouble(KEY_LATITUDE,latitude);
-        bundle.putDouble(KEY_LONGITUDE,longitude);
+        Log.e("lat|lng",latitude + "  " + longitude);
+        bundle.putString(KEY_LATITUDE,latitude+"");
+        bundle.putString(KEY_LONGITUDE,longitude+"");
         bundle.putString(KEY_AREA,area);
-        bundle.putString(KEY_AREA,post);
+        bundle.putString(KEY_POST,post);
         intent.putExtras(bundle);
 
         getActivity().startActivity(intent);

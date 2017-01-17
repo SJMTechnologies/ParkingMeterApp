@@ -99,4 +99,11 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="time">total_time</string>
+    <string name="amount">amount</string>
+    <string name="area">area</string>
+    <string name="post">post</string>
+    <string name="latitude">latitude</string>
+    <string name="longitude">longitude</string>
 </resources>

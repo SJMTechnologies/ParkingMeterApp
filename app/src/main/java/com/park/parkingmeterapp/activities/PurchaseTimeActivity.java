@@ -1,6 +1,7 @@
 package com.park.parkingmeterapp.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.park.parkingmeterapp.R;
+import com.park.parkingmeterapp.fragment.ParkLaterFragment;
 import com.park.parkingmeterapp.purchase.PurchasePresenterImpl;
 import com.park.parkingmeterapp.purchase.PurchaseView;
 
@@ -36,6 +38,8 @@ public class PurchaseTimeActivity extends AppCompatActivity implements PurchaseV
     TextView txtTime;
 
     private PurchasePresenterImpl purchasePresenter;
+    String lat , lng ;
+    String area = "", post = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,26 +47,34 @@ public class PurchaseTimeActivity extends AppCompatActivity implements PurchaseV
         setContentView(R.layout.activity_purchase_time);
         ButterKnife.bind(this);
 
+        if (getIntent().getExtras() != null) {
+          Bundle b =  getIntent().getExtras();
+
+            area = getIntent().getExtras().getString(ParkLaterFragment.KEY_AREA);
+            post = getIntent().getExtras().getString(ParkLaterFragment.KEY_POST);
+            lat = getIntent().getExtras().getString(ParkLaterFragment.KEY_LATITUDE);
+            lng = getIntent().getExtras().getString(ParkLaterFragment.KEY_LONGITUDE);
+        }
         purchasePresenter = new PurchasePresenterImpl(this);
     }
 
     @OnClick(R.id.btnIncrease)
-    public void onIncrease(){
+    public void onIncrease() {
         purchasePresenter.onPlusClicked();
     }
 
     @OnClick(R.id.btnDecrease)
-    public void onDecrease(){
+    public void onDecrease() {
         purchasePresenter.onMinusClicked();
     }
 
     @OnClick(R.id.btnDone)
-    public void onDone(){
+    public void onDone() {
         purchasePresenter.onDoneClicked();
     }
 
     @OnClick(R.id.btnCancel)
-    public void onCancel(){
+    public void onCancel() {
         purchasePresenter.onCancelClicked();
     }
 
@@ -74,7 +86,17 @@ public class PurchaseTimeActivity extends AppCompatActivity implements PurchaseV
     }
 
     @Override
-    public void done() {
+    public void done(String time,  String amount) {
+        Intent Kintnet = new Intent(PurchaseTimeActivity.this, PaymentActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.time), time);
+        bundle.putString(getString(R.string.area), area);
+        bundle.putString(getString(R.string.amount), amount);
+        bundle.putString(getString(R.string.post), post);
+        bundle.putString(getString(R.string.longitude), lat);
+        bundle.putString(getString(R.string.latitude), lng);
+        Kintnet.putExtras(bundle);
+        startActivity(Kintnet);
         PurchaseTimeActivity.this.finish();
     }
 

@@ -119,6 +119,7 @@ public class ParkPresenterImpl implements ParkPresenter {
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
+                Log.e("lat|LNg",marker.getPosition().latitude + " " + marker.getPosition().longitude );
                 parkView.startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle());
             }
         });
@@ -135,6 +136,7 @@ public class ParkPresenterImpl implements ParkPresenter {
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
+                Log.e("lat|LNg",marker.getPosition().latitude + " " + marker.getPosition().longitude );
                 parkView.startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle());
             }
         });

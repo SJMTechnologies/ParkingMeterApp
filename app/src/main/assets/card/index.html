@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="HandheldFriendly" content="true">
+<link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+
+<body>
+<!-- Add animations on Braintree Hosted Fields events -->
+
+<!-- Card numbers
+4111 1111 1111 1111: Visa
+5555 5555 5555 4444: MasterCard
+3714 496353 98431: American Express
+-->
+
+<!--[if IE 9]>
+<style>
+
+header {
+  margin-top: 1em;
+  text-align: center;
+}
+
+#my-sample-form {
+  margin: 0 auto;
+  padding-top: 2em;
+}
+
+.bg-illustration {
+  z-index: -1;
+}
+
+#button-pay {
+  margin: 1em auto 0;
+  display: block;
+}
+
+.cardinfo-exp-date, .cardinfo-cvv {
+  width: 45%;
+  float: left;
+}
+
+.cardinfo-wrapper {
+  overflow: hidden;
+}
+
+</style>
+<![endif]-->
+
+<div class="form-container">
+
+  <header>
+    <h1>Payment Method</h1>
+  </header>
+
+  <form id="my-sample-form" class="scale-down">
+   <div class="cardinfo-card-name">
+      <label class="cardinfo-label" for="card-name">Card Name</label>
+      	<input id="card-name" class='input-wrapper' type="text" />
+    </div>
+    
+    <div class="cardinfo-card-number">
+        <label class="cardinfo-label" for="card-number">Name on card</label>
+        <input id="card-number" class='input-wrapper' type="text" />
+      <div id="card-image"></div>
+    </div>
+
+    <div class="cardinfo-wrapper">
+      <div class="cardinfo-exp-date">
+        <label class="cardinfo-label" for="expiration-date">Valid Thru</label>
+        <input id="expiration-date" class='input-wrapper' type="text" />
+      </div>
+
+      <div class="cardinfo-cvv">
+        <label class="cardinfo-label" for="cvv">CVV</label>
+        <input id="cvv" class='input-wrapper' type="text" />
+      </div>
+    </div>
+  </form>
+
+  <input id="button-pay" type="submit" value="Continue" />
+</div>
+</body>
+</html>

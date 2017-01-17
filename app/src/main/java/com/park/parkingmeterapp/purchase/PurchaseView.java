@@ -7,6 +7,6 @@ package com.park.parkingmeterapp.purchase;
 public interface PurchaseView {
 
     void setTimeAndPrice(String time, String price);
-    void done();
+    void done(String time,String amount);
     void cancel();
 }

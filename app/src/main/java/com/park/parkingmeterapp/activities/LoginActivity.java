@@ -120,6 +120,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if(ParkApp.preferences.getAuthToken().length() > 0){
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
             LoginActivity.this.finish();
+        }else
+        {
+            ParkApp.preferences.clearPref();
         }
     }
 
