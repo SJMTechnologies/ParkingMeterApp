@@ -1,5 +1,8 @@
 package com.park.parkingmeterapp.fragment;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +26,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -61,10 +67,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -79,19 +87,27 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
     public static final String KEY_AREA = "key_area";
     public static final String KEY_POST = "key_post";
     private static final String TAG = "ParkLaterFragment";
-    private String strAddress = "";
+    public static List<MarkerDetail> markerDetailList;
     Location mLastLocation;
     double lat, lon;
     IntentFilter intentFilter;
     @BindView(R.id.txtAutoComplete)
     AutoCompleteTextView txtAutoComplete;
+
+    @BindView(R.id.txtdate)
+    TextView txtDate;
+    @BindView(R.id.txttime)
+    TextView txtTime;
+
+
     boolean isFromParkLater;
+    private String strAddress = "";
     private GoogleMap mParkLaterGoogleMap;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
     private Unbinder unbinder;
-    public static List<MarkerDetail> markerDetailList;
     private ParkPresenterImpl parkPresenter;
+    private int myear, mmonth, mday, mhour, mmin;
     private BroadcastReceiver locationReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -136,6 +152,53 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
             places.release();
         }
     };
+    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(i);
+            assert item != null;
+            final String placeId = String.valueOf(item.placeId);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+        }
+    };
+    private DatePickerDialog.OnDateSetListener myDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker arg0,
+                                      int arg1, int arg2, int arg3) {
+                    // TODO Auto-generated method stub
+                    // arg1 = year
+                    // arg2 = month
+                    // arg3 = day
+                    mday = arg3;
+                    mmonth = arg2;
+                    myear = arg1;
+                    Log.e("Date",mday + "  " + mmonth +"  " + myear);
+                    showDate(arg1, arg2 + 1, arg3);
+                }
+            };
+    private TimePickerDialog.OnTimeSetListener myTimeListner = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int i, int i1) {
+            mhour = i;
+            mmin = i1;
+
+            showTime(i, i1);
+
+        }
+    };
+
+    public static ParkLaterFragment newInstance(boolean isFromParkLater) {
+        Log.e(TAG, "newInstance: isFromParkLater " + isFromParkLater);
+        Bundle args = new Bundle();
+
+        ParkLaterFragment fragment = new ParkLaterFragment();
+        args.putBoolean(KEY_IS_FROM_PARK_LATER, isFromParkLater);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public void addMarkers(GoogleMap mGoogleMap, List<MarkerDetail> markerList) {
         Log.e(TAG, "addMarkers: " + markerDetailList.size());
@@ -154,7 +217,7 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
             mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
-                    Log.e(" parkletar 1 lat|LNg",marker.getPosition().latitude + " " + marker.getPosition().longitude );
+                    Log.e(" parkletar 1 lat|LNg", marker.getPosition().latitude + " " + marker.getPosition().longitude);
                     startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle());
                 }
             });
@@ -220,28 +283,6 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
         return markerDetailList;
     }
 
-    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(i);
-            assert item != null;
-            final String placeId = String.valueOf(item.placeId);
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
-            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
-        }
-    };
-
-    public static ParkLaterFragment newInstance(boolean isFromParkLater) {
-        Log.e(TAG, "newInstance: isFromParkLater " + isFromParkLater);
-        Bundle args = new Bundle();
-
-        ParkLaterFragment fragment = new ParkLaterFragment();
-        args.putBoolean(KEY_IS_FROM_PARK_LATER, isFromParkLater);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -268,6 +309,15 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
                 e.printStackTrace();
             }
         }
+
+        Calendar c = Calendar.getInstance();
+        mday = c.get(Calendar.DAY_OF_MONTH);
+        mmonth = c.get(Calendar.MONTH);
+        myear = c.get(Calendar.YEAR);
+        mhour = c.get(Calendar.HOUR_OF_DAY);
+        mmin = c.get(Calendar.MINUTE);
+
+        Log.e("Date",mday + "  " + mmonth +"  " + myear);
         parkPresenter = new ParkPresenterImpl(this, getActivity());
         markerDetailList = new ArrayList<>();
         intentFilter = new IntentFilter();
@@ -285,13 +335,13 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
                             (new LatLng(Double.parseDouble("36.840180"), Double.parseDouble("-75.978080")), 12);
                     mParkLaterGoogleMap.animateCamera(cameraPosition);
                     Log.e(TAG, "onMapReady: " + mParkLaterGoogleMap.isMyLocationEnabled());
-                    if(!isFromParkLater){
+                    if (!isFromParkLater) {
                         double latitude = 36.840180;
                         double longitude = -75.978080;
                         LatLng latLng = new LatLng(latitude, longitude);
                         new ReverseGeocodingTask(getActivity()).execute(latLng);
                     } else {
-                        loadMarkers(0.0,0.0);
+                        loadMarkers(0.0, 0.0);
                     }
                 }
             });
@@ -384,11 +434,11 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
 
         Intent intent = new Intent(getActivity(), PurchaseTimeActivity.class);
         Bundle bundle = new Bundle();
-        Log.e("lat|lng",latitude + "  " + longitude);
-        bundle.putString(KEY_LATITUDE,latitude+"");
-        bundle.putString(KEY_LONGITUDE,longitude+"");
-        bundle.putString(KEY_AREA,area);
-        bundle.putString(KEY_POST,post);
+        Log.e("lat|lng", latitude + "  " + longitude);
+        bundle.putString(KEY_LATITUDE, latitude + "");
+        bundle.putString(KEY_LONGITUDE, longitude + "");
+        bundle.putString(KEY_AREA, area);
+        bundle.putString(KEY_POST, post);
         intent.putExtras(bundle);
 
         getActivity().startActivity(intent);
@@ -397,6 +447,42 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
     @Override
     public void showToast(String message) {
         Snackbar.make(txtAutoComplete, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+
+
+    @OnClick(R.id.txttime)
+    public void onClickViewcalender1() {
+        TimeDialog();
+    }
+
+    @OnClick(R.id.txtdate)
+    public void onClickViewcalender2() {
+        DateDialog();
+    }
+
+    private void showDate(int year, int month, int day) {
+
+        txtDate.setText(new StringBuilder().append(day).append("/")
+                .append(month).append("/").append(year));
+    }
+
+    private void showTime(int hour, int min) {
+        txtTime.setText(new StringBuilder().append(hour).append(":")
+                .append(min));
+    }
+
+    public void DateDialog() {
+        Log.e("Date",mday + "  " + mmonth +"  " + myear);
+        Dialog d = new DatePickerDialog(getContext(),
+                myDateListener, myear, mmonth, mday);
+        d.show();
+    }
+
+    public void TimeDialog() {
+
+        Dialog d = new TimePickerDialog(getContext(), myTimeListner, mhour, mmin, true);
+        d.show();
     }
 
     public class ReverseGeocodingTask extends AsyncTask<LatLng, Void, String> {
@@ -443,8 +529,11 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
             if (addressText != null && addressText.length() > 0) {
                 Log.e(TAG, "onPostExecute: addressText " + addressText);
                 strAddress = addressText;
-                parkPresenter.addMarkers(mParkLaterGoogleMap,latitude,longitude,strAddress);
+                parkPresenter.addMarkers(mParkLaterGoogleMap, latitude, longitude, strAddress);
             }
         }
     }
 }
+
+
+
