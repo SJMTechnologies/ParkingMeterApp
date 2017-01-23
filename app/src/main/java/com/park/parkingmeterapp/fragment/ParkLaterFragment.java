@@ -12,6 +12,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -98,9 +100,9 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
     TextView txtDate;
     @BindView(R.id.txttime)
     TextView txtTime;
-
-
     boolean isFromParkLater;
+    private double selLat = 0, selLng = 0;
+    private double CurlLat = 0, CurLng = 0;
     private String strAddress = "";
     private GoogleMap mParkLaterGoogleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -175,7 +177,7 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
                     mday = arg3;
                     mmonth = arg2;
                     myear = arg1;
-                    Log.e("Date",mday + "  " + mmonth +"  " + myear);
+                    Log.e("Date", mday + "  " + mmonth + "  " + myear);
                     showDate(arg1, arg2 + 1, arg3);
                 }
             };
@@ -202,6 +204,7 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
 
     public void addMarkers(GoogleMap mGoogleMap, List<MarkerDetail> markerList) {
         Log.e(TAG, "addMarkers: " + markerDetailList.size());
+
         for (MarkerDetail markerDetail : markerDetailList) {
             MarkerOptions markerOptions = new MarkerOptions();
             Log.e(TAG, "addMarkerToMap: markerDetail.getLatitude() " + markerDetail.getLatitude() + " " + markerDetail.getLongitude());
@@ -210,7 +213,19 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker());
             markerOptions.title(markerDetail.getPost());
             markerOptions.snippet(markerDetail.getArea());
-            mGoogleMap.addMarker(markerOptions);
+
+            Marker m = mGoogleMap.addMarker(markerOptions);
+            mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    Log.e("onMarkerClick", "onMarkerClick");
+                    selLat = marker.getPosition().latitude;
+                    selLng = marker.getPosition().longitude;
+                    Log.e(" parkletar 1 lat|LNg", marker.getPosition().latitude + " " + marker.getPosition().longitude);
+                    return false;
+                }
+            });
+
             CameraUpdate cameraPosition = CameraUpdateFactory.newLatLngZoom(position, 15);
             mGoogleMap.animateCamera(cameraPosition);
 
@@ -221,6 +236,8 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
                     startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle());
                 }
             });
+
+
         }
     }
 
@@ -314,10 +331,12 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
         mday = c.get(Calendar.DAY_OF_MONTH);
         mmonth = c.get(Calendar.MONTH);
         myear = c.get(Calendar.YEAR);
-        mhour = c.get(Calendar.HOUR_OF_DAY);
+        mhour = c.get(Calendar.HOUR_OF_DAY) + 1;
         mmin = c.get(Calendar.MINUTE);
 
-        Log.e("Date",mday + "  " + mmonth +"  " + myear);
+        showDate(myear,mmonth+1,mday);
+        showTime(mhour,mmin);
+        Log.e("Date", mday + "  " + mmonth +1 + "  " + myear);
         parkPresenter = new ParkPresenterImpl(this, getActivity());
         markerDetailList = new ArrayList<>();
         intentFilter = new IntentFilter();
@@ -402,6 +421,10 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
     @Override
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        if (latLng != null) {
+            CurlLat = location.getLatitude();
+            CurLng = location.getLongitude();
+        }
         if (!isFromParkLater && isFirstTime) {
             if (mParkLaterGoogleMap != null) {
                 mParkLaterGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(12));
@@ -449,6 +472,18 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
         Snackbar.make(txtAutoComplete, message, Snackbar.LENGTH_SHORT).show();
     }
 
+    @OnClick(R.id.imgNavigation)
+    public void onClickViewnavigation() {
+        if(selLng ==0 || selLat ==0){
+            Toast.makeText(getContext(),"Destination is not selected", Toast.LENGTH_SHORT).show();
+        }else{
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?saddr="+ CurlLat +","+ CurLng+"&daddr="+ selLat+","+selLng));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER );
+        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        startActivity(intent);}
+    }
 
 
     @OnClick(R.id.txttime)
@@ -458,6 +493,16 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
 
     @OnClick(R.id.txtdate)
     public void onClickViewcalender2() {
+        DateDialog();
+    }
+
+    @OnClick(R.id.txttime2)
+    public void onClickViewcalender3() {
+        TimeDialog();
+    }
+
+    @OnClick(R.id.txtdate2)
+    public void onClickViewcalender4() {
         DateDialog();
     }
 
@@ -473,7 +518,7 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
     }
 
     public void DateDialog() {
-        Log.e("Date",mday + "  " + mmonth +"  " + myear);
+        Log.e("Date", mday + "  " + mmonth + "  " + myear);
         Dialog d = new DatePickerDialog(getContext(),
                 myDateListener, myear, mmonth, mday);
         d.show();

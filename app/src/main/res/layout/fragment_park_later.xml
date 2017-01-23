@@ -15,8 +15,8 @@
                           android:layout_weight="0.4"
 
                           android:orientation="horizontal">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:layout_marginStart="20dp"
+                <TextView android:id="@+id/txtdate2" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:layout_marginStart="20dp"
                           android:padding="5dp"
                           android:text="Date:  "
                           android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -31,8 +31,8 @@
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
                           android:layout_weight="0.6"
                           android:orientation="horizontal">
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:layout_marginStart="10dp"
+                <TextView android:id="@+id/txttime2" android:layout_width="wrap_content"
+                          android:layout_height="wrap_content" android:layout_marginStart="10dp"
                           android:padding="5dp"
                           android:text="Time:  "
                           android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -55,11 +55,18 @@
         android:layout_below="@+id/lytCalendar"
         android:layout_gravity="top"
         android:hint="@string/search_hint"/>
-    <fragment
-        android:id="@+id/park_later_map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/txtAutoComplete"/>
+    <RelativeLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent" android:layout_below="@+id/txtAutoComplete"
+                 android:orientation="vertical">
+        <fragment
+            android:id="@+id/park_later_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+        />
+
+        <ImageButton android:id="@+id/imgNavigation" android:layout_alignParentRight="true" android:layout_margin="5dp"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:background="@drawable/navigation" />
+    </RelativeLayout>
+
 
 </RelativeLayout>
