@@ -41,6 +41,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.park.parkingmeterapp.ParkApp;
 import com.park.parkingmeterapp.R;
 import com.park.parkingmeterapp.login.LoginPresenterImpl;
@@ -63,36 +64,29 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     BaseAnimatorSet bas_in;
     BaseAnimatorSet bas_out;
-
-    private ProgressDialog pd;
     //email
     @BindView(R.id.etEmail)
     EditText etEmail;
-
     @BindView(R.id.etPassword)
     EditText etPassword;
-
     @BindView(R.id.btnLogin)
     Button btnLogin;
-
     @BindView(R.id.txtNeedAnAccount)
     TextView txtNeedAnAccount;
-
     @BindView(R.id.txtForgotPassword)
     TextView txtForgotPassword;
-
     @BindView(R.id.btnFacebook)
     ImageView btnFacebook;
-
     @BindView(R.id.btnGooglePlus)
     ImageView btnGooglePlus;
+    private ProgressDialog pd;
 
 //    private Databasehelper db;
-
     private CallbackManager mCallBackManager;
     private LoginManager loginManager;
     private GoogleApiClient mGoogleApiClient;
     private LoginPresenterImpl loginPresenterImpl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,15 +109,30 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 //        }
 
-        loginPresenterImpl = new LoginPresenterImpl(LoginActivity.this,this);
+        loginPresenterImpl = new LoginPresenterImpl(LoginActivity.this, this);
+        ParkApp.preferences.clearPref();
+        try {
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            Log.d("Firbase id login", "Refreshed token: " + refreshedToken);
+            ParkApp.preferences.setNotificationToken(refreshedToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        if(ParkApp.preferences.getAuthToken().length() > 0){
+       /* if(ParkApp.preferences.getAuthToken().length() > 0){
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
             LoginActivity.this.finish();
         }else
         {
             ParkApp.preferences.clearPref();
-        }
+            try {
+                String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+                Log.d("Firbase id login", "Refreshed token: " + refreshedToken);
+                ParkApp.preferences.setNotificationToken(refreshedToken);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }*/
     }
 
     public void printKeyHash() {
@@ -142,12 +151,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @OnClick(R.id.txtNeedAnAccount)
-    public void onRegister(){
+    public void onRegister() {
         startActivity(new Intent(LoginActivity.this, LoginActivity.class));
     }
 
     @OnClick(R.id.txtForgotPassword)
-    public void onForgotPassword(){
+    public void onForgotPassword() {
         dialog();
     }
 
@@ -157,13 +166,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @OnClick(R.id.btnFacebook)
-    public void onFacebookPressed(){
+    public void onFacebookPressed() {
         Log.e(TAG, "onFacebookPressed: ");
         facebookLogin();
     }
 
     @OnClick(R.id.txtNeedAnAccount)
-    public void onNeedAccountPressed(){
+    public void onNeedAccountPressed() {
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 
@@ -245,7 +254,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //            intent.putExtra("name", acct.getDisplayName());
 //            startActivity(intent);
             Log.e(TAG, "handleSignInResult: acct.getGivenName() " + acct.getGivenName() + " email " + acct.getEmail() + " acct.getGivenName() " + acct.getFamilyName());
-            loginPresenterImpl.onGoogleLoggedIn(acct.getEmail(),acct.getGivenName(),acct.getFamilyName());
+            loginPresenterImpl.onGoogleLoggedIn(acct.getEmail(), acct.getGivenName(), acct.getFamilyName());
         }
     }
 
@@ -309,7 +318,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void hideProgressDialog() {
-        if(pd.isShowing()){
+        if (pd.isShowing()) {
             pd.dismiss();
         }
     }
@@ -337,16 +346,17 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         };
 
-        OnBtnClickL[] clickLs = new OnBtnClickL[]{onBtnClickL2,onBtnClickL1};
+        OnBtnClickL[] clickLs = new OnBtnClickL[]{onBtnClickL2, onBtnClickL1};
         dialog.setOnBtnClickL(clickLs);
         dialog.isTitleShow(false)
                 .content(msg)
-                .btnText("Okay","")
+                .btnText("Okay", "")
                 .showAnim(bas_in)
                 .dismissAnim(bas_out)
                 .show();
     }
-    public void dialog(){
+
+    public void dialog() {
         // Creating alert Dialog with one Button
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
 
@@ -364,7 +374,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Setting Positive "Yes" Button
         alertDialog.setPositiveButton("Done",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         // Write your code here to execute after dialog
                         String email = input.getText().toString();
                         loginPresenterImpl.onForgotPasswordClicked(email);
