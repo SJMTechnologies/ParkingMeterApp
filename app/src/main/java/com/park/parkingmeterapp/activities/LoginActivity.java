@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 //        }
 
         loginPresenterImpl = new LoginPresenterImpl(LoginActivity.this, this);
-        ParkApp.preferences.clearPref();
+       // ParkApp.preferences.clearPref();
         try {
             String refreshedToken = FirebaseInstanceId.getInstance().getToken();
             Log.d("Firbase id login", "Refreshed token: " + refreshedToken);
@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             e.printStackTrace();
         }
 
-       /* if(ParkApp.preferences.getAuthToken().length() > 0){
+       if(ParkApp.preferences.getAuthToken().length() > 0){
             startActivity(new Intent(LoginActivity.this,MainActivity.class));
             LoginActivity.this.finish();
         }else
@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }*/
+        }
     }
 
     public void printKeyHash() {
