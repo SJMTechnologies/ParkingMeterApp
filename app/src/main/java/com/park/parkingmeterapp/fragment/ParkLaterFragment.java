@@ -111,7 +111,7 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
     private double selLat = 0, selLng = 0;
     private double CurlLat = 0, CurLng = 0;
     private String strAddress = "";
-    private Marker selmarker=null;
+    private Marker selmarker = null;
     private GoogleMap mParkLaterGoogleMap;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
@@ -150,7 +150,8 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(txtAutoComplete.getWindowToken(), 0);
             if (isFromParkLater) {
-                Log.e(TAG, "onResult: " + markerDetailList.size());
+                //Log.e(TAG, "onResult: " + markerDetailList.size());
+                loadMarkers(place.getLatLng().latitude, place.getLatLng().longitude);
             }
 
 //            if(markerDetailList != null){
@@ -241,7 +242,7 @@ public class ParkLaterFragment extends Fragment implements LocationListener, Goo
                 @Override
                 public void onInfoWindowClick(Marker marker) {
                     Log.e(" parkletar 1 lat|LNg", marker.getPosition().latitude + " " + marker.getPosition().longitude);
-selmarker = marker;
+                    selmarker = marker;
                     CheckAvailability(txtDate.getText().toString(), txtTime.getText().toString(), marker.getSnippet());
                 }
             });
@@ -304,7 +305,7 @@ selmarker = marker;
     }
 
     private boolean getAvailabilityJson(String body) {
-        body ="{\"result\":[{\"status\":\"Available\",\"message\":\"Meter is available.\",\"code\":\"1\"}]}";
+        body = "{\"result\":[{\"status\":\"Available\",\"message\":\"Meter is available.\",\"code\":\"1\"}]}";
         boolean isAvailable = false;
 
         try {
@@ -324,7 +325,7 @@ selmarker = marker;
                 String message = result.optString("message");
                 if (status.equalsIgnoreCase("Available")) {
                     isAvailable = true;
-                    startActivity(selmarker.getPosition().latitude, selmarker.getPosition().longitude, selmarker.getSnippet(), selmarker.getTitle(),txtDate.getText().toString(),txtTime.getText().toString());
+                    startActivity(selmarker.getPosition().latitude, selmarker.getPosition().longitude, selmarker.getSnippet(), selmarker.getTitle(), txtDate.getText().toString(), txtTime.getText().toString());
                 }
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
             }
@@ -425,12 +426,19 @@ selmarker = marker;
                     mParkLaterGoogleMap.animateCamera(cameraPosition);
                     Log.e(TAG, "onMapReady: " + mParkLaterGoogleMap.isMyLocationEnabled());
                     if (!isFromParkLater) {
+
+
                         double latitude = 36.840180;
                         double longitude = -75.978080;
+                        if (CurlLat != 0 && CurLng != 0) {
+                            latitude = CurlLat;
+                            longitude = CurLng;
+                        }
+
                         LatLng latLng = new LatLng(latitude, longitude);
                         new ReverseGeocodingTask(getActivity()).execute(latLng);
                     } else {
-                        loadMarkers(0.0, 0.0);
+                        //loadMarkers(0.0, 0.0);
                     }
                 }
             });
@@ -523,7 +531,7 @@ selmarker = marker;
     }
 
     @Override
-    public void startActivity(double latitude, double longitude, String area, String post,String sDate,String stime) {
+    public void startActivity(double latitude, double longitude, String area, String post, String sDate, String stime) {
 
         Intent intent = new Intent(getActivity(), PurchaseTimeActivity.class);
         Bundle bundle = new Bundle();
@@ -597,8 +605,8 @@ selmarker = marker;
     }
 
     private void showTime(int hour, int min) {
-        txtTime.setText(new StringBuilder().append(hour).append(":")
-                .append(min));
+        txtTime.setText(new StringBuilder().append(String.format("%02d", hour)).append(":")
+                .append(String.format("%02d", min)));
     }
 
     public void DateDialog() {

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sjmtechs.park.fragment.ParkLaterFragment">
+>
     <FrameLayout android:id="@+id/lytCalendar" android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  android:orientation="vertical">
@@ -51,7 +51,7 @@
     </FrameLayout>
     <AutoCompleteTextView
         android:id="@+id/txtAutoComplete" android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content" android:singleLine="true"
         android:layout_below="@+id/lytCalendar"
         android:layout_gravity="top"
         android:hint="@string/search_hint"/>
