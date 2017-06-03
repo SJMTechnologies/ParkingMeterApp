@@ -48,9 +48,9 @@ public class LoginPresenterImpl implements LoginPresenter {
             loginView.showProgressDialog();
             ApiService api = RetroClient.getApiService();
             Log.e("getNotificationToken()", ParkApp.preferences.getNotificationToken() + "");
-            if (ParkApp.preferences.getNotificationToken().trim().length() < 2) {
+           /* if (ParkApp.preferences.getNotificationToken().trim().length() < 2) {
                 ParkApp.preferences.setNotificationToken("123");
-            }
+            }*/
             Call<String> call = api.doLogin(username, password, ParkApp.preferences.getNotificationToken());
 
             call.enqueue(new Callback<String>() {

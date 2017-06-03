@@ -39,8 +39,8 @@ public class PurchaseTimeActivity extends AppCompatActivity implements PurchaseV
 
     private PurchasePresenterImpl purchasePresenter;
     String lat , lng ;
-    String area = "", post = "";
-
+    String area = "", post = "", sdate="",stime="";
+    boolean isfromparklater;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +54,9 @@ public class PurchaseTimeActivity extends AppCompatActivity implements PurchaseV
             post = getIntent().getExtras().getString(ParkLaterFragment.KEY_POST);
             lat = getIntent().getExtras().getString(ParkLaterFragment.KEY_LATITUDE);
             lng = getIntent().getExtras().getString(ParkLaterFragment.KEY_LONGITUDE);
+            sdate = getIntent().getExtras().getString(ParkLaterFragment.KEY_DATE);
+            stime = getIntent().getExtras().getString(ParkLaterFragment.KEY_Time);
+            isfromparklater= getIntent().getExtras().getBoolean(ParkLaterFragment.KEY_IS_FROM_PARK_LATER);
         }
         purchasePresenter = new PurchasePresenterImpl(this);
     }
@@ -92,6 +95,9 @@ public class PurchaseTimeActivity extends AppCompatActivity implements PurchaseV
         bundle.putString(getString(R.string.time), time);
         bundle.putString(getString(R.string.area), area);
         bundle.putString(getString(R.string.amount), amount);
+        bundle.putString(getString(R.string.seldate), sdate);
+        bundle.putString(getString(R.string.seltime), stime);
+        bundle.putBoolean(getString(R.string.park_later), isfromparklater);
         bundle.putString(getString(R.string.post), post);
         bundle.putString(getString(R.string.longitude), lat);
         bundle.putString(getString(R.string.latitude), lng);

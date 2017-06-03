@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity
         } else if(id == R.id.nav_my_account){
             ParkApp.preferences.setIsUpdate(true);
             startActivity(RegisterActivity.class);
-            MainActivity.this.finish();
+            //MainActivity.this.finish();
         } else if(id == R.id.nav_my_pref){
             startActivity(ParkPreferencesActivity.class);
         }

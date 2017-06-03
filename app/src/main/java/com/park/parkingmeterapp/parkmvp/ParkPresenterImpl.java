@@ -115,12 +115,22 @@ public class ParkPresenterImpl implements ParkPresenter {
         LatLng position = new LatLng(Double.parseDouble(markerList.get(0).getLatitude()), Double.parseDouble(markerList.get(0).getLongitude()));
         CameraUpdate cameraPosition = CameraUpdateFactory.newLatLngZoom(position, 15);
         mGoogleMap.animateCamera(cameraPosition);
-
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.e("onMarkerClick", "onMarkerClick");
+//                selLat = marker.getPosition().latitude;
+//                selLng = marker.getPosition().longitude;
+                Log.e(" parkletar 1 lat|LNg", marker.getPosition().latitude + " " + marker.getPosition().longitude);
+                parkView.onMarkerClick(marker);
+                return false;
+            }
+        });
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 Log.e("lat|LNg",marker.getPosition().latitude + " " + marker.getPosition().longitude );
-                parkView.startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle());
+                parkView.startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle(),"","");
             }
         });
     }
@@ -133,11 +143,22 @@ public class ParkPresenterImpl implements ParkPresenter {
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker());
         markerOptions.title(address);
         mGoogleMap.addMarker(markerOptions);
+        mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                Log.e("onMarkerClick", "onMarkerClick");
+//                selLat = marker.getPosition().latitude;
+//                selLng = marker.getPosition().longitude;
+                Log.e(" parkletar 1 lat|LNg", marker.getPosition().latitude + " " + marker.getPosition().longitude);
+                parkView.onMarkerClick(marker);
+                return false;
+            }
+        });
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 Log.e("lat|LNg",marker.getPosition().latitude + " " + marker.getPosition().longitude );
-                parkView.startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle());
+                parkView.startActivity(marker.getPosition().latitude, marker.getPosition().longitude, marker.getSnippet(), marker.getTitle(),"","");
             }
         });
     }

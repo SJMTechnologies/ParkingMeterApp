@@ -106,4 +106,7 @@
     <string name="post">post</string>
     <string name="latitude">latitude</string>
     <string name="longitude">longitude</string>
+    <string name="seldate">sdate</string>
+    <string name="seltime">stime</string>
+    <string name="fromparklater">parklater</string>
 </resources>

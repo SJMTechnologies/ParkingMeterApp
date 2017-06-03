@@ -58,4 +58,10 @@ public interface ApiService {
     Call<String> getMarkerDetails(@Query("auth_token") String authToken,
                                   @Query("latitude") String latitude,
                                   @Query("longitude") String longitude);
+
+    @GET("web-services.php?web_method=checkAvailability")
+    Call<String> getAvailability(@Query("auth_token") String authToken,
+                                 @Query("selected_date") String seldate,
+                                 @Query("selected_time") String selTIme,
+                                 @Query("post") String post);
 }
