@@ -47,7 +47,7 @@ public class PaymentActivity extends AppCompatActivity {
 
         }
         if (!isfromparklater) {
-            Calendar c =Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+            Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
             sdate = (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.YEAR);
             stime = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
 
@@ -69,6 +69,9 @@ public class PaymentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(PaymentActivity.this, MainActivity.class));
+        Intent intent = new Intent(PaymentActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 }
