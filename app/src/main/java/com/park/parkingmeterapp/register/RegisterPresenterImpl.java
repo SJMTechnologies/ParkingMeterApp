@@ -119,8 +119,10 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                         register.getAddressTwo(), register.getCity(), register.getRegionOrState(),
                         register.getPostalCode(), register.getCountry(), p,
                         register.getFax(), String.valueOf(register.isSubscribe()));
-            }
 
+
+            }
+            Log.e("call", call.request().url().toString());
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
@@ -143,7 +145,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
 
     @Override
     public void setDataForUpdate() {
-        if(InternetConnection.checkConnection(context)){
+        if (InternetConnection.checkConnection(context)) {
             registerView.showProgressDialog();
             String authToken = ParkApp.preferences.getAuthToken();
             ApiService api = RetroClient.getApiService();
@@ -189,7 +191,7 @@ public class RegisterPresenterImpl implements RegisterPresenter {
                 register.setTelephone(j.optString("telephone"));
                 register.setFax(j.optString("fax"));
                 register.setBusinessName(j.optString("company"));
-                if(j.optString("newsletter").equals("1")){
+                if (j.optString("newsletter").equals("1")) {
                     register.setSubscribe(true);
                 } else {
                     register.setSubscribe(false);

@@ -64,4 +64,6 @@ public interface ApiService {
                                  @Query("selected_date") String seldate,
                                  @Query("selected_time") String selTIme,
                                  @Query("post") String post);
+
+
 }

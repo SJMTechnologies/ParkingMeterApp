@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewOne">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputFname">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etLastName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputLname">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputEmail">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etTelephone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputPhone">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etBusinessName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewAddress">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etAddressOne"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputAdd1">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etAddressTwo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputAdd2">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etCity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputCity">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etPostalCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -195,7 +195,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textInputPostalCode">
-        <EditText
+        <EditText android:singleLine="true"
             android:id="@+id/etFax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
